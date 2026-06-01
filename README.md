@@ -47,3 +47,17 @@ Deploy to a VPS or Docker-capable host. Serverless/static hosts are not suitable
 - `MAX_DURATION_SECONDS`: maximum accepted video duration, default `900`.
 - `MAX_CONCURRENT_JOBS`: maximum active conversions, default `1`.
 - `JOB_TTL_MS`: temporary job retention window, default `600000`.
+
+## Production Environment Example
+
+```dotenv
+APP_PASSWORD=use-a-long-private-password
+SESSION_SECRET=use-a-long-random-secret
+PORT=3000
+MAX_DURATION_SECONDS=900
+MAX_CONCURRENT_JOBS=1
+JOB_TTL_MS=600000
+```
+
+Use HTTPS at the reverse proxy or hosting layer. Keep the app behind the password screen and do not expose temp directories.
+
