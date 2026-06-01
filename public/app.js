@@ -14,6 +14,7 @@ const downloadLink = document.querySelector("#downloadLink");
 let pollTimer = null;
 
 function showConverter() {
+  resetConverterState();
   loginView.hidden = true;
   converterView.hidden = false;
   logoutButton.hidden = false;
@@ -35,6 +36,16 @@ function clearStatus() {
   statusBox.hidden = true;
   statusTitle.textContent = "";
   statusMessage.textContent = "";
+}
+
+function resetConverterState() {
+  stopPolling();
+  clearStatus();
+  downloadLink.hidden = true;
+  downloadLink.removeAttribute("href");
+  downloadLink.removeAttribute("download");
+  jobMessage.textContent = "";
+  submitButton.disabled = false;
 }
 
 function stopPolling() {
