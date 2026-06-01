@@ -1,0 +1,49 @@
+# YouTube MP3 Hosted App
+
+Small password-protected web app for converting a YouTube video URL to an MP3 download. Use it only for videos you own or have permission to download and convert.
+
+## Requirements
+
+- Node.js 20+
+- `yt-dlp`
+- `ffmpeg`
+
+Docker installs the media tools inside the image. Local non-Docker runs need those tools available on `PATH`.
+
+## Local Run
+
+```powershell
+npm.cmd install
+Copy-Item .env.example .env
+npm.cmd run dev
+```
+
+Edit `.env` and set `APP_PASSWORD` and `SESSION_SECRET` before using the app.
+
+Open `http://localhost:3000`.
+
+## Test
+
+```powershell
+npm.cmd test
+```
+
+## Docker
+
+```powershell
+docker build -t youtube-mp3-app .
+docker run --rm -p 3000:3000 --env-file .env youtube-mp3-app
+```
+
+## Deployment
+
+Deploy to a VPS or Docker-capable host. Serverless/static hosts are not suitable because conversion requires long-running processes, `yt-dlp`, `ffmpeg`, and temporary disk space.
+
+## Configuration
+
+- `APP_PASSWORD`: shared password for the web UI.
+- `SESSION_SECRET`: secret used to sign the auth cookie.
+- `PORT`: HTTP port, default `3000`.
+- `MAX_DURATION_SECONDS`: maximum accepted video duration, default `900`.
+- `MAX_CONCURRENT_JOBS`: maximum active conversions, default `1`.
+- `JOB_TTL_MS`: temporary job retention window, default `600000`.
