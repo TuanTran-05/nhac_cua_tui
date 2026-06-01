@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trich xuat MP3 tu YouTube</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel">
+        <div class="brand-row">
+          <div class="brand-mark" aria-hidden="true">MP3</div>
+          <button id="logoutButton" class="ghost-button" type="button" hidden>Dang xuat</button>
+        </div>
+
+        <section id="loginView" class="view">
+          <h1>Dang nhap</h1>
+          <p class="muted">Nhap mat khau de su dung cong cu trich xuat MP3.</p>
+          <form id="loginForm" class="form">
+            <label for="password">Mat khau</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button type="submit">Vao cong cu</button>
+            <p id="loginMessage" class="message" role="status"></p>
+          </form>
+        </section>
+
+        <section id="converterView" class="view" hidden>
+          <h1>Trich xuat MP3</h1>
+          <p class="muted">Dan link YouTube cua video ban co quyen tai va chuyen doi.</p>
+          <form id="jobForm" class="form">
+            <label for="youtubeUrl">Link YouTube</label>
+            <input id="youtubeUrl" name="youtubeUrl" type="url" required>
+            <button id="submitButton" type="submit">Trich xuat MP3</button>
+          </form>
+
+          <div id="statusBox" class="status-box" hidden>
+            <div class="spinner" aria-hidden="true"></div>
+            <div>
+              <p id="statusTitle" class="status-title">Dang xu ly</p>
+              <p id="statusMessage" class="muted"></p>
+            </div>
+          </div>
+
+          <a id="downloadLink" class="download-button" hidden>Tai MP3</a>
+          <p id="jobMessage" class="message" role="status"></p>
+        </section>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
