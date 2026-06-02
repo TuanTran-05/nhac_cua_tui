@@ -8,6 +8,7 @@ Small password-protected web app for converting a YouTube video URL to an MP3 do
 - QR Generator: create an SVG QR code from text or a URL.
 - JSON Formatter: format, minify, validate, and copy JSON locally in the browser.
 - Password Generator: generate and copy browser-crypto passwords locally.
+- PDF Tools: merge, split, rotate, delete pages, extract pages, compress, and inspect PDF metadata.
 
 
 ## Requirements
@@ -15,6 +16,7 @@ Small password-protected web app for converting a YouTube video URL to an MP3 do
 - Node.js 20+
 - `yt-dlp`
 - `ffmpeg`
+- `ghostscript` for PDF compression outside Docker
 
 Docker installs the media tools inside the image. Local non-Docker runs need those tools available on `PATH`.
 
@@ -58,6 +60,8 @@ The QR, JSON, and password tools do not require extra system packages. The MP3 c
 - `MAX_CONCURRENT_JOBS`: maximum active conversions, default `1`.
 - `JOB_TTL_MS`: temporary job retention window, default `600000`.
 - `COOKIE_SECURE`: set `true` only when the app is served over HTTPS, default `false`.
+- `PDF_MAX_FILE_MB`: maximum PDF upload size per file, default `50`.
+- `PDF_MAX_FILES`: maximum PDF files per request, default `10`.
 
 ## Production Environment Example
 
