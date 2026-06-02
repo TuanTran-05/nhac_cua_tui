@@ -2,6 +2,14 @@
 
 Small password-protected web app for converting a YouTube video URL to an MP3 download. Use it only for videos you own or have permission to download and convert.
 
+## Tools
+
+- MP3 Converter: convert permitted YouTube videos to temporary MP3 downloads.
+- QR Generator: create an SVG QR code from text or a URL.
+- JSON Formatter: format, minify, validate, and copy JSON locally in the browser.
+- Password Generator: generate and copy browser-crypto passwords locally.
+
+
 ## Requirements
 
 - Node.js 20+
@@ -38,6 +46,8 @@ docker run --rm -p 3000:3000 --env-file .env youtube-mp3-app
 ## Deployment
 
 Deploy to a VPS or Docker-capable host. Serverless/static hosts are not suitable because conversion requires long-running processes, `yt-dlp`, `ffmpeg`, and temporary disk space.
+
+The QR, JSON, and password tools do not require extra system packages. The MP3 converter still requires `yt-dlp` and `ffmpeg`, which are installed by the Dockerfile.
 
 ## Configuration
 
