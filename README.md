@@ -57,6 +57,7 @@ The QR, JSON, and password tools do not require extra system packages. The MP3 c
 - `MAX_DURATION_SECONDS`: maximum accepted video duration, default `900`.
 - `MAX_CONCURRENT_JOBS`: maximum active conversions, default `1`.
 - `JOB_TTL_MS`: temporary job retention window, default `600000`.
+- `COOKIE_SECURE`: set `true` only when the app is served over HTTPS, default `false`.
 
 ## Production Environment Example
 
@@ -67,7 +68,9 @@ PORT=3000
 MAX_DURATION_SECONDS=900
 MAX_CONCURRENT_JOBS=1
 JOB_TTL_MS=600000
+COOKIE_SECURE=true
 ```
 
 Use HTTPS at the reverse proxy or hosting layer. Keep the app behind the password screen and do not expose temp directories.
 
+For direct HTTP testing on a VM external IP, keep `COOKIE_SECURE=false`; otherwise the browser will not send the auth cookie after login.

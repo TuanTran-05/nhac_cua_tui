@@ -10,6 +10,7 @@ test("loadConfig parses required and numeric values", () => {
     MAX_DURATION_SECONDS: "120",
     MAX_CONCURRENT_JOBS: "2",
     JOB_TTL_MS: "5000",
+    COOKIE_SECURE: "true",
     NODE_ENV: "production"
   });
 
@@ -19,7 +20,29 @@ test("loadConfig parses required and numeric values", () => {
   assert.equal(config.maxDurationSeconds, 120);
   assert.equal(config.maxConcurrentJobs, 2);
   assert.equal(config.jobTtlMs, 5000);
+  assert.equal(config.cookieSecure, true);
   assert.equal(config.isProduction, true);
+});
+
+test("loadConfig defaults COOKIE_SECURE to false for direct HTTP deploys", () => {
+  const config = loadConfig({
+    APP_PASSWORD: "secret",
+    SESSION_SECRET: "session-secret"
+  });
+
+  assert.equal(config.cookieSecure, false);
+});
+
+test("loadConfig rejects invalid COOKIE_SECURE values", () => {
+  assert.throws(
+    () =>
+      loadConfig({
+        APP_PASSWORD: "secret",
+        SESSION_SECRET: "session-secret",
+        COOKIE_SECURE: "sometimes"
+      }),
+    /COOKIE_SECURE must be true or false/
+  );
 });
 
 test("loadConfig requires APP_PASSWORD", () => {

@@ -51,7 +51,7 @@ function createAuth(config) {
     res.cookie(COOKIE_NAME, signAuthCookie(), {
       httpOnly: true,
       sameSite: "lax",
-      secure: config.isProduction,
+      secure: config.cookieSecure,
       maxAge: 1000 * 60 * 60 * 12
     });
   }
@@ -60,7 +60,7 @@ function createAuth(config) {
     res.clearCookie(COOKIE_NAME, {
       httpOnly: true,
       sameSite: "lax",
-      secure: config.isProduction
+      secure: config.cookieSecure
     });
   }
 

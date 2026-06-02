@@ -5,7 +5,7 @@ const { createAuth } = require("../src/auth");
 const config = {
   appPassword: "secret",
   sessionSecret: "session-secret",
-  isProduction: false
+  cookieSecure: false
 };
 
 test("verifyPassword accepts only the configured password", () => {
@@ -45,4 +45,20 @@ test("requireAuth rejects requests without a valid cookie", async () => {
 
   assert.equal(statusCode, 401);
   assert.deepEqual(body, { error: "UNAUTHORIZED" });
+});
+
+test("setAuthCookie uses configured secure flag", () => {
+  const auth = createAuth({ ...config, cookieSecure: true });
+  let options = null;
+  const res = {
+    cookie(_name, _value, cookieOptions) {
+      options = cookieOptions;
+    }
+  };
+
+  auth.setAuthCookie(res);
+
+  assert.equal(options.secure, true);
+  assert.equal(options.httpOnly, true);
+  assert.equal(options.sameSite, "lax");
 });
