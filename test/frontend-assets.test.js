@@ -30,3 +30,18 @@ test("HTML contains personal tool hub navigation and views", () => {
   assert.match(html, /data-tool="password"/);
 });
 
+test("HTML contains PDF suite navigation and action forms", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "public", "index.html"), "utf8");
+
+  assert.match(html, /data-tool="pdf"/);
+  assert.match(html, /id="pdfToolView"/);
+  assert.match(html, /data-pdf-action="merge"/);
+  assert.match(html, /data-pdf-action="split"/);
+  assert.match(html, /data-pdf-action="rotate"/);
+  assert.match(html, /data-pdf-action="delete"/);
+  assert.match(html, /data-pdf-action="extract"/);
+  assert.match(html, /data-pdf-action="compress"/);
+  assert.match(html, /data-pdf-action="info"/);
+});
+
+

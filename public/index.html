@@ -36,6 +36,7 @@
             <button class="tool-nav-item" type="button" data-tool="qr">QR</button>
             <button class="tool-nav-item" type="button" data-tool="json">JSON</button>
             <button class="tool-nav-item" type="button" data-tool="password">Password</button>
+            <button class="tool-nav-item" type="button" data-tool="pdf">PDF</button>
           </nav>
 
           <section class="tool-content">
@@ -56,6 +57,10 @@
                 <button class="tool-card" type="button" data-tool="password">
                   <span>Password Generator</span>
                   <small>Tao mat khau manh bang browser crypto.</small>
+                </button>
+                <button class="tool-card" type="button" data-tool="pdf">
+                  <span>PDF Tools</span>
+                  <small>Merge, split, rotate, delete, extract, compress va xem thong tin PDF.</small>
                 </button>
               </div>
             </section>
@@ -120,6 +125,46 @@
                 <button id="copyPasswordButton" class="secondary-button" type="button">Copy</button>
               </div>
               <p id="passwordMessage" class="message" role="status"></p>
+            </section>
+
+            <section id="pdfToolView" class="tool-view" data-tool-view="pdf" hidden>
+              <div class="pdf-actions">
+                <button class="tool-card" type="button" data-pdf-action="merge"><span>Merge PDF</span><small>Gop nhieu file PDF.</small></button>
+                <button class="tool-card" type="button" data-pdf-action="split"><span>Split PDF</span><small>Tach PDF thanh nhieu file theo nhom trang.</small></button>
+                <button class="tool-card" type="button" data-pdf-action="rotate"><span>Rotate PDF</span><small>Xoay toan bo hoac mot so trang.</small></button>
+                <button class="tool-card" type="button" data-pdf-action="delete"><span>Delete Pages</span><small>Xoa cac trang chi dinh.</small></button>
+                <button class="tool-card" type="button" data-pdf-action="extract"><span>Extract Pages</span><small>Lay cac trang chi dinh ra file moi.</small></button>
+                <button class="tool-card" type="button" data-pdf-action="compress"><span>Compress PDF</span><small>Giam dung luong bang Ghostscript.</small></button>
+                <button class="tool-card" type="button" data-pdf-action="info"><span>PDF Info</span><small>Xem so trang va metadata co ban.</small></button>
+              </div>
+
+              <form id="pdfForm" class="form pdf-form">
+                <label for="pdfFiles">File PDF</label>
+                <input id="pdfFiles" name="files" type="file" accept="application/pdf,.pdf" multiple required>
+
+                <label id="pdfRangesLabel" for="pdfRanges">Trang / range</label>
+                <input id="pdfRanges" name="ranges" type="text">
+
+                <label id="pdfDegreesLabel" for="pdfDegrees">Do xoay</label>
+                <select id="pdfDegrees" name="degrees">
+                  <option value="90">90 do</option>
+                  <option value="180">180 do</option>
+                  <option value="270">270 do</option>
+                </select>
+
+                <label id="pdfProfileLabel" for="pdfProfile">Muc nen</label>
+                <select id="pdfProfile" name="profile">
+                  <option value="screen">Screen - nho nhat</option>
+                  <option value="ebook" selected>Ebook - can bang</option>
+                  <option value="printer">Printer - chat luong cao</option>
+                  <option value="prepress">Prepress - chat luong rat cao</option>
+                </select>
+
+                <button id="pdfSubmitButton" type="submit">Xu ly PDF</button>
+              </form>
+
+              <div id="pdfInfoPanel" class="info-panel" hidden></div>
+              <p id="pdfMessage" class="message" role="status"></p>
             </section>
           </section>
         </div>
