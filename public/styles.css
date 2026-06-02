@@ -30,6 +30,16 @@ body {
   padding: 28px 16px;
 }
 
+.copyright-mark {
+  position: fixed;
+  right: 16px;
+  bottom: 12px;
+  color: rgba(102, 112, 133, 0.82);
+  font-size: 12px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
 .login-panel,
 .tool-shell {
   width: min(100%, 1120px);
@@ -366,4 +376,3 @@ select {
     grid-template-columns: 1fr;
   }
 }
-

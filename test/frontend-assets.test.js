@@ -51,5 +51,19 @@ test("frontend entrypoint imports and initializes PDF tool", () => {
   assert.match(appJs, /\.\/tools\/pdf\.js/);
 });
 
+test("PDF info renderer does not inject metadata through innerHTML", () => {
+  const pdfJs = fs.readFileSync(
+    path.join(__dirname, "..", "public", "js", "tools", "pdf.js"),
+    "utf8"
+  );
 
+  assert.doesNotMatch(pdfJs, /innerHTML\s*=/);
+  assert.match(pdfJs, /textContent/);
+});
+
+test("HTML contains copyright ownership mark", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "public", "index.html"), "utf8");
+
+  assert.match(html, /copyright@tuantran_05/);
+});
 

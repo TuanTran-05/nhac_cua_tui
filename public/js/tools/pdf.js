@@ -13,6 +13,7 @@ const messages = {
   PDF_FILE_REQUIRED: "Vui long chon file PDF.",
   PDF_FILES_REQUIRED: "Can it nhat 2 file PDF.",
   PDF_TOO_MANY_FILES: "Qua nhieu file PDF.",
+  PDF_FILE_TOO_LARGE: "File PDF vuot qua gioi han dung luong.",
   PDF_ONLY_ALLOWED: "Chi chap nhan file PDF.",
   PDF_RANGE_REQUIRED: "Vui long nhap trang hoac range.",
   PDF_RANGE_INVALID: "Range trang khong hop le.",
@@ -57,10 +58,22 @@ function renderInfo(panel, info) {
     ["Modified", info.modificationDate]
   ];
 
-  panel.innerHTML = rows
+  const rowElements = rows
     .filter(([, value]) => value !== undefined && value !== null && value !== "")
-    .map(([label, value]) => `<div class="info-row"><span>${label}</span><span>${value}</span></div>`)
-    .join("");
+    .map(([label, value]) => {
+      const row = document.createElement("div");
+      const labelElement = document.createElement("span");
+      const valueElement = document.createElement("span");
+
+      row.className = "info-row";
+      labelElement.textContent = label;
+      valueElement.textContent = String(value);
+      row.append(labelElement, valueElement);
+
+      return row;
+    });
+
+  panel.replaceChildren(...rowElements);
   panel.hidden = false;
 }
 

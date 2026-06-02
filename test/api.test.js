@@ -142,6 +142,21 @@ test("POST /api/tools/pdf/unknown returns PDF_ACTION_UNKNOWN", async () => {
   assert.equal(response.body.error, "PDF_ACTION_UNKNOWN");
 });
 
+test("POST /api/tools/pdf/info returns JSON for rejected upload files", async () => {
+  const app = makeApp({});
+  const agent = request.agent(app);
+
+  await agent.post("/api/login").send({ password: "secret" }).expect(200);
+
+  const response = await agent
+    .post("/api/tools/pdf/info")
+    .attach("files", Buffer.from("not a pdf"), "notes.txt")
+    .expect(400);
+
+  assert.match(response.headers["content-type"], /^application\/json/);
+  assert.equal(response.body.error, "PDF_ONLY_ALLOWED");
+});
+
 test("POST /api/tools/pdf/info returns JSON after login", async () => {
   const pdfTool = {
     routerOptions: {
@@ -201,5 +216,4 @@ test("POST /api/tools/pdf/merge returns a file download after login", async () =
   assert.match(response.headers["content-disposition"], /merged\.pdf/);
   assert.equal(response.body.toString(), "merged");
 });
-
 
