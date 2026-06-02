@@ -4,6 +4,7 @@ import { initMp3Tool } from "./tools/mp3.js";
 import { initQrTool } from "./tools/qr.js";
 import { initJsonTool } from "./tools/json.js";
 import { initPasswordTool } from "./tools/password.js";
+import { initPdfTool } from "./tools/pdf.js";
 
 const loginView = byId("loginView");
 const appView = byId("appView");
@@ -63,4 +64,5 @@ initMp3Tool({ requestJson });
 initQrTool({ requestJson });
 initJsonTool();
 initPasswordTool();
+initPdfTool();
 showLogin();

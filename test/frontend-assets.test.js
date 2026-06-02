@@ -44,4 +44,12 @@ test("HTML contains PDF suite navigation and action forms", () => {
   assert.match(html, /data-pdf-action="info"/);
 });
 
+test("frontend entrypoint imports and initializes PDF tool", () => {
+  const appJs = fs.readFileSync(path.join(__dirname, "..", "public", "js", "app.js"), "utf8");
+
+  assert.match(appJs, /initPdfTool/);
+  assert.match(appJs, /\.\/tools\/pdf\.js/);
+});
+
+
 

@@ -12,7 +12,8 @@ export function createToolNavigator({ titleElement, navButtons, viewElements }) 
     mp3: "MP3 Converter",
     qr: "QR Generator",
     json: "JSON Formatter",
-    password: "Password Generator"
+    password: "Password Generator",
+    pdf: "PDF Tools"
   };
 
   function showTool(tool) {
