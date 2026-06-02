@@ -3,6 +3,8 @@ const cookieParser = require("cookie-parser");
 const path = require("node:path");
 
 const defaultQrTool = require("./tools/qr");
+const { createPdfRouter } = require("./tools/pdf/router");
+const { createPdfTool } = require("./tools/pdf");
 
 function sendError(res, error) {
   const statusCode = error.statusCode || 500;
@@ -11,7 +13,7 @@ function sendError(res, error) {
   });
 }
 
-function createApp({ auth, jobService, qrTool = defaultQrTool }) {
+function createApp({ auth, jobService, qrTool = defaultQrTool, pdfTool = createPdfTool() }) {
   const app = express();
 
   app.use(express.json({ limit: "16kb" }));
@@ -41,6 +43,9 @@ function createApp({ auth, jobService, qrTool = defaultQrTool }) {
       sendError(res, error);
     }
   });
+
+  app.use(createPdfRouter({ auth, pdfTool }));
+
 
 
   app.post("/api/jobs", auth.requireAuth, async (req, res) => {

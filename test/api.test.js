@@ -10,9 +10,9 @@ const config = {
   isProduction: false
 };
 
-function makeApp(jobService, qrTool) {
+function makeApp(jobService, qrTool, pdfTool) {
   const auth = createAuth(config);
-  return createApp({ auth, jobService, qrTool });
+  return createApp({ auth, jobService, qrTool, pdfTool });
 }
 
 test("POST /api/login rejects a bad password", async () => {
@@ -108,4 +108,98 @@ test("POST /api/tools/qr returns SVG after login", async () => {
   assert.equal(response.body.filename, "qr-code.svg");
   assert.match(response.body.svg, /^<svg/);
 });
+
+test("POST /api/tools/pdf/info rejects anonymous requests", async () => {
+  const app = makeApp({});
+
+  const response = await request(app)
+    .post("/api/tools/pdf/info")
+    .attach("files", Buffer.from("%PDF-1.4"), "sample.pdf");
+
+  assert.equal(response.status, 401);
+});
+
+test("POST /api/tools/pdf/unknown returns PDF_ACTION_UNKNOWN", async () => {
+  const pdfTool = {
+    routerOptions: {
+      limits: { fileSize: 1024 },
+      maxFiles: 10
+    },
+    async handleAction() {
+      throw new Error("not called");
+    }
+  };
+  const app = makeApp({}, undefined, pdfTool);
+  const agent = request.agent(app);
+
+  await agent.post("/api/login").send({ password: "secret" }).expect(200);
+
+  const response = await agent
+    .post("/api/tools/pdf/unknown")
+    .attach("files", Buffer.from("%PDF-1.4"), "sample.pdf")
+    .expect(400);
+
+  assert.equal(response.body.error, "PDF_ACTION_UNKNOWN");
+});
+
+test("POST /api/tools/pdf/info returns JSON after login", async () => {
+  const pdfTool = {
+    routerOptions: {
+      limits: { fileSize: 1024 },
+      maxFiles: 10
+    },
+    async handleAction(action, files) {
+      assert.equal(action, "info");
+      assert.equal(files[0].originalName, "sample.pdf");
+      return {
+        type: "json",
+        body: { pageCount: 2, filename: "sample.pdf" }
+      };
+    }
+  };
+  const app = makeApp({}, undefined, pdfTool);
+  const agent = request.agent(app);
+
+  await agent.post("/api/login").send({ password: "secret" }).expect(200);
+
+  const response = await agent
+    .post("/api/tools/pdf/info")
+    .attach("files", Buffer.from("%PDF-1.4"), "sample.pdf")
+    .expect(200);
+
+  assert.equal(response.body.pageCount, 2);
+});
+
+test("POST /api/tools/pdf/merge returns a file download after login", async () => {
+  const pdfTool = {
+    routerOptions: {
+      limits: { fileSize: 1024 },
+      maxFiles: 10
+    },
+    async handleAction(action) {
+      assert.equal(action, "merge");
+      return {
+        type: "buffer",
+        filename: "merged.pdf",
+        contentType: "application/pdf",
+        buffer: Buffer.from("merged")
+      };
+    }
+  };
+  const app = makeApp({}, undefined, pdfTool);
+  const agent = request.agent(app);
+
+  await agent.post("/api/login").send({ password: "secret" }).expect(200);
+
+  const response = await agent
+    .post("/api/tools/pdf/merge")
+    .attach("files", Buffer.from("%PDF-1.4"), "one.pdf")
+    .attach("files", Buffer.from("%PDF-1.4"), "two.pdf")
+    .expect(200);
+
+  assert.equal(response.headers["content-type"], "application/pdf");
+  assert.match(response.headers["content-disposition"], /merged\.pdf/);
+  assert.equal(response.body.toString(), "merged");
+});
+
 
