@@ -3,50 +3,128 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trich xuat MP3 tu YouTube</title>
+    <title>Personal Tool Hub</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
     <main class="app-shell">
-      <section class="panel">
-        <div class="brand-row">
-          <div class="brand-mark" aria-hidden="true">MP3</div>
-          <button id="logoutButton" class="ghost-button" type="button" hidden>Dang xuat</button>
-        </div>
+      <section id="loginView" class="login-panel">
+        <div class="brand-mark" aria-hidden="true">TH</div>
+        <h1>Dang nhap</h1>
+        <p class="muted">Nhap mat khau de mo bo cong cu ca nhan.</p>
+        <form id="loginForm" class="form">
+          <label for="password">Mat khau</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <button type="submit">Vao tool hub</button>
+          <p id="loginMessage" class="message" role="status"></p>
+        </form>
+      </section>
 
-        <section id="loginView" class="view">
-          <h1>Dang nhap</h1>
-          <p class="muted">Nhap mat khau de su dung cong cu trich xuat MP3.</p>
-          <form id="loginForm" class="form">
-            <label for="password">Mat khau</label>
-            <input id="password" name="password" type="password" autocomplete="current-password" required>
-            <button type="submit">Vao cong cu</button>
-            <p id="loginMessage" class="message" role="status"></p>
-          </form>
-        </section>
-
-        <section id="converterView" class="view" hidden>
-          <h1>Trich xuat MP3</h1>
-          <p class="muted">Dan link YouTube cua video ban co quyen tai va chuyen doi.</p>
-          <form id="jobForm" class="form">
-            <label for="youtubeUrl">Link YouTube</label>
-            <input id="youtubeUrl" name="youtubeUrl" type="url" required>
-            <button id="submitButton" type="submit">Trich xuat MP3</button>
-          </form>
-
-          <div id="statusBox" class="status-box" hidden>
-            <div class="spinner" aria-hidden="true"></div>
-            <div>
-              <p id="statusTitle" class="status-title">Dang xu ly</p>
-              <p id="statusMessage" class="muted"></p>
-            </div>
+      <section id="appView" class="tool-shell" hidden>
+        <header class="topbar">
+          <div>
+            <p class="app-label">Private Tools</p>
+            <h1 id="activeToolTitle">Dashboard</h1>
           </div>
+          <button id="logoutButton" class="ghost-button" type="button">Dang xuat</button>
+        </header>
 
-          <a id="downloadLink" class="download-button" hidden>Tai MP3</a>
-          <p id="jobMessage" class="message" role="status"></p>
-        </section>
+        <div class="workspace">
+          <nav class="tool-nav" aria-label="Tool navigation">
+            <button class="tool-nav-item is-active" type="button" data-tool="dashboard">Dashboard</button>
+            <button class="tool-nav-item" type="button" data-tool="mp3">MP3</button>
+            <button class="tool-nav-item" type="button" data-tool="qr">QR</button>
+            <button class="tool-nav-item" type="button" data-tool="json">JSON</button>
+            <button class="tool-nav-item" type="button" data-tool="password">Password</button>
+          </nav>
+
+          <section class="tool-content">
+            <section id="dashboardView" class="tool-view" data-tool-view="dashboard">
+              <div class="tool-grid">
+                <button class="tool-card" type="button" data-tool="mp3">
+                  <span>MP3 Converter</span>
+                  <small>Trich audio MP3 tu link YouTube duoc phep su dung.</small>
+                </button>
+                <button class="tool-card" type="button" data-tool="qr">
+                  <span>QR Generator</span>
+                  <small>Tao QR SVG tu link hoac text.</small>
+                </button>
+                <button class="tool-card" type="button" data-tool="json">
+                  <span>JSON Formatter</span>
+                  <small>Format, minify va kiem tra JSON.</small>
+                </button>
+                <button class="tool-card" type="button" data-tool="password">
+                  <span>Password Generator</span>
+                  <small>Tao mat khau manh bang browser crypto.</small>
+                </button>
+              </div>
+            </section>
+
+            <section id="mp3ToolView" class="tool-view" data-tool-view="mp3" hidden>
+              <form id="jobForm" class="form">
+                <label for="youtubeUrl">Link YouTube</label>
+                <input id="youtubeUrl" name="youtubeUrl" type="url" required>
+                <button id="submitButton" type="submit">Trich xuat MP3</button>
+              </form>
+              <div id="statusBox" class="status-box" hidden>
+                <div class="spinner" aria-hidden="true"></div>
+                <div>
+                  <p id="statusTitle" class="status-title">Dang xu ly</p>
+                  <p id="statusMessage" class="muted"></p>
+                </div>
+              </div>
+              <a id="downloadLink" class="download-button" hidden>Tai MP3</a>
+              <p id="jobMessage" class="message" role="status"></p>
+            </section>
+
+            <section id="qrToolView" class="tool-view" data-tool-view="qr" hidden>
+              <form id="qrForm" class="form">
+                <label for="qrText">Text hoac link</label>
+                <textarea id="qrText" name="qrText" rows="5" maxlength="2048" required></textarea>
+                <button id="qrButton" type="submit">Tao QR</button>
+              </form>
+              <div id="qrPreview" class="qr-preview" hidden></div>
+              <button id="qrDownloadButton" type="button" hidden>Tai SVG</button>
+              <p id="qrMessage" class="message" role="status"></p>
+            </section>
+
+            <section id="jsonToolView" class="tool-view" data-tool-view="json" hidden>
+              <div class="split-tool">
+                <div class="form">
+                  <label for="jsonInput">JSON input</label>
+                  <textarea id="jsonInput" rows="14" spellcheck="false"></textarea>
+                  <div class="button-row">
+                    <button id="formatJsonButton" type="button">Format</button>
+                    <button id="minifyJsonButton" class="secondary-button" type="button">Minify</button>
+                    <button id="copyJsonButton" class="secondary-button" type="button">Copy</button>
+                  </div>
+                </div>
+                <div class="form">
+                  <label for="jsonOutput">Output</label>
+                  <textarea id="jsonOutput" rows="14" spellcheck="false" readonly></textarea>
+                </div>
+              </div>
+              <p id="jsonMessage" class="message" role="status"></p>
+            </section>
+
+            <section id="passwordToolView" class="tool-view" data-tool-view="password" hidden>
+              <div class="form">
+                <label for="passwordLength">Do dai</label>
+                <input id="passwordLength" type="number" min="8" max="128" value="20">
+                <label><input id="includeLowercase" type="checkbox" checked> Chu thuong</label>
+                <label><input id="includeUppercase" type="checkbox" checked> Chu hoa</label>
+                <label><input id="includeNumbers" type="checkbox" checked> So</label>
+                <label><input id="includeSymbols" type="checkbox" checked> Ky tu dac biet</label>
+                <button id="generatePasswordButton" type="button">Tao mat khau</button>
+                <input id="generatedPassword" type="text" readonly>
+                <button id="copyPasswordButton" class="secondary-button" type="button">Copy</button>
+              </div>
+              <p id="passwordMessage" class="message" role="status"></p>
+            </section>
+          </section>
+        </div>
       </section>
     </main>
-    <script src="/app.js"></script>
+    <script type="module" src="/js/app.js"></script>
   </body>
 </html>
