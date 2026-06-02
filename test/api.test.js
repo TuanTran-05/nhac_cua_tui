@@ -10,9 +10,9 @@ const config = {
   isProduction: false
 };
 
-function makeApp(jobService) {
+function makeApp(jobService, qrTool) {
   const auth = createAuth(config);
-  return createApp({ auth, jobService });
+  return createApp({ auth, jobService, qrTool });
 }
 
 test("POST /api/login rejects a bad password", async () => {
@@ -74,3 +74,38 @@ test("protected routes reject anonymous requests", async () => {
 
   assert.equal(response.status, 401);
 });
+
+test("POST /api/tools/qr rejects anonymous requests", async () => {
+  const app = makeApp({});
+
+  const response = await request(app)
+    .post("/api/tools/qr")
+    .send({ text: "hello" });
+
+  assert.equal(response.status, 401);
+});
+
+test("POST /api/tools/qr returns SVG after login", async () => {
+  const qrTool = {
+    async generateQrSvg(text) {
+      assert.equal(text, "hello");
+      return {
+        svg: "<svg><path d=\"M0 0h1v1z\"/></svg>",
+        filename: "qr-code.svg"
+      };
+    }
+  };
+  const app = makeApp({}, qrTool);
+  const agent = request.agent(app);
+
+  await agent.post("/api/login").send({ password: "secret" }).expect(200);
+
+  const response = await agent
+    .post("/api/tools/qr")
+    .send({ text: "hello" })
+    .expect(200);
+
+  assert.equal(response.body.filename, "qr-code.svg");
+  assert.match(response.body.svg, /^<svg/);
+});
+

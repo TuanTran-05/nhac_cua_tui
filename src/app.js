@@ -2,6 +2,8 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("node:path");
 
+const defaultQrTool = require("./tools/qr");
+
 function sendError(res, error) {
   const statusCode = error.statusCode || 500;
   res.status(statusCode).json({
@@ -9,7 +11,7 @@ function sendError(res, error) {
   });
 }
 
-function createApp({ auth, jobService }) {
+function createApp({ auth, jobService, qrTool = defaultQrTool }) {
   const app = express();
 
   app.use(express.json({ limit: "16kb" }));
@@ -30,6 +32,16 @@ function createApp({ auth, jobService }) {
     auth.clearAuthCookie(res);
     res.json({ ok: true });
   });
+
+  app.post("/api/tools/qr", auth.requireAuth, async (req, res) => {
+    try {
+      const result = await qrTool.generateQrSvg(req.body?.text);
+      res.json(result);
+    } catch (error) {
+      sendError(res, error);
+    }
+  });
+
 
   app.post("/api/jobs", auth.requireAuth, async (req, res) => {
     try {
